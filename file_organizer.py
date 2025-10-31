@@ -16,7 +16,7 @@ messages = {
         "organizing" : "در حال مرتبسازی فایل ها...",
     },
     "en" : {
-        "select_lang" : "Select language (fa/en)",
+        "select_lang" : "Select language (fa/en): ",
         "welcome" : "Welcome to Auto File Organizer ",
         "path_input" : "Enter the folder path to organize: ",
         "use_default" : "Do you want to use the default categories? (y/n)",
@@ -44,7 +44,7 @@ def organize_files(folder_path, categories, lang):
 
     for filename in os.listdir(folder_path):
         file_path = os.path.join(folder_path, filename)
-        if os.path.is_file():
+        if os.path.isfile(file_path):
             ext = filename.split(".")[-1].lower()
             for category, extensions in categories.items():
                 if ext in extensions:
@@ -57,21 +57,21 @@ def organize_files(folder_path, categories, lang):
 
 def main():
     #choose language
-    lang = input(messages["en"]["select_lang"]).strip.lower()
+    lang = input(messages["en"]["select_lang"]).strip().lower()
     if lang not in ["fa", "en"]:
         lang = "en"
 
     print(messages[lang]["welcome"])
 
     # input path
-    folder_path = input(messages[lang]["paht_input"]).strip()
+    folder_path = input(messages[lang]["path_input"]).strip()
 
     if not os.path.exists(folder_path):
         print(messages[lang]["invalid_path"])
         return
 
     #choose categories 
-    use_default = input(messages[lang]["use_default"]).strip.lower()
+    use_default = input(messages[lang]["use_default"]).strip().lower()
     if use_default == "y":
         categories = default_categories
     else:
