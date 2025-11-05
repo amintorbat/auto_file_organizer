@@ -4,6 +4,7 @@ import shutil
 from pathlib import Path
 from datetime import datetime
 from dataclasses import dataclass
+from tqdm import tqdm
 
 @dataclass
 class FileInfo:
@@ -15,6 +16,7 @@ class FileInfo:
     selected: bool = False
 
 
+history = []
 
 
 # -- languages --
@@ -29,6 +31,9 @@ messages = {
         "done": "مرتب سازی با موفقیت انجام شد ✅",
         "invalid_path": "آدرس وارد شده معتبر نیست ❌",
         "organizing" : "در حال مرتبسازی فایل ها...",
+        "undo_done": "آخرین عملیات با موفقیت بازگردانده شد 🔄",
+        "no_undo": "هیچ عملی برای بازگردانی وجود ندارد ⚠️",
+        "report": "\n📊 گزارش عملکرد:\n- فایل‌ها: {files}\n- حجم جابه‌جا شده: {size:.2f} MB\n- زمان اجرا: {time:.2f} ثانیه\n"
     },
     "en" : {
         "select_lang" : "Select language (fa/en): ",
@@ -40,6 +45,10 @@ messages = {
         "done": "File organized successfully ✅",
         "invalid_path" : "Invalid folder path ❌",
         "organizing": "Organizing files...",
+         "undo_prompt": "Do you want to undo the last action? (y/n): ",
+        "undo_done": "Last action undone successfully 🔄",
+        "no_undo": "No actions to undo ⚠️",
+        "report": "\n📊 Report:\n- Files: {files}\n- Total moved: {size:.2f} MB\n- Time taken: {time:.2f} sec\n"
     }
 }
 
@@ -58,58 +67,102 @@ default_categories = {
 
 # sorting by file type
 def organize_by_type(folder_path, categories, lang):
+    start_time = datetime.now()
+    total_size = 0
+    count = 0
     print(messages[lang]["organizing"])
 
-    for filename in os.listdir(folder_path):
+
+    files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
+    for filename in tqdm(files, desc="Processing", ncols=80):
         file_path = os.path.join(folder_path, filename)
-        if os.path.isfile(file_path):
-            ext = filename.split(".")[-1].lower()
-            for category, extensions in categories.items():
-                if ext in extensions:
-                    dest_folder = os.path.join(folder_path, category)
-                    os.makedirs(dest_folder, exist_ok=True)
-                    shutil.move(file_path, os.path.join(dest_folder,filename))
-                    break
+
+
+        ext = filename.split(".")[-1].lower()
+        for category, extensions in categories.items():
+            if ext in extensions:
+                dest_folder = os.path.join(folder_path, category)
+                os.makedirs(dest_folder, exist_ok=True)
+                dest_path = os.path.join(dest_folder,filename)
+                shutil.move(file_path, dest_path)
+                history.append("moved", dest_path, file_path)
+                total_size += os.path.getsize(dest_path)
+                break
 
     print(messages[lang]["done"])
+    report(lang, count, total_size, start_time)
+
 
 
 # sorting by date (creation / modification)
-
 def organize_by_date(folder_path, lang):
+    start_time = datetime.now()
+    total_size = 0
+    count = 0
     print(messages[lang]["organizing"])
-    for filename in os.listdir(folder_path):
+
+    files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
+    for filename in tqdm(files, desc="Processing", ncols=80):
         file_path = os.path.join(folder_path, filename)
-        if os.path.isfile(file_path):
-            timestamp = os.path.getmtime(file_path)
-            date = datetime.fromtimestamp(timestamp)
-            year = str(date.year)
-            month = str(date.month).zfill(2)
-            dest_folder = os.path.join(folder_path, year, month)
-            os.makedirs(dest_folder, exist_ok=True)
-            shutil.move(file_path, os.path.join(dest_folder, filename))
+        timestamp = os.path.getmtime(file_path)
+        date = datetime.fromtimestamp(timestamp)
+        year, month = str(date.year), str(date.month).zfill(2)
+        dest_folder = os.path.join(folder_path, year, month)
+        os.makedirs(dest_folder, exist_ok=True)
+        dest_path = os.path.join(dest_folder, filename)
+        shutil.move(file_path, dest_path)
+        history.append(("moved", dest_path, file_path))
+        total_size += os.path.getsize(dest_path)
+        count+=1
+
     print(messages[lang]["done"])
+    report(lang, count, total_size, start_time)
 
 
 # sorting by file size
-
 def organize_by_size(folder_path, lang):
+    start_time = datetime.now()
+    total_size = 0
+    count = 0
     print(messages[lang]["organizing"])
-    for filename in os.listdir(folder_path):
+    files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
+
+    for filename in tqdm(files, desc="Processing", ncols=80):
         file_path = os.path.join(folder_path, filename)
-        if os.path.isfile(file_path):
-            size = os.path.getsize(file_path) / (1024 * 1024) # convert to MB
-            if size < 10:
-                size_folder = "Small_Files"
-            elif size < 100 :
-                size_folder = "Medium_Files"
-            else:
-                size_folder = "Large_Files"
+        size = os.path.getsize(file_path) / (1024 * 1024) # convert to MB
+        if size < 10:
+            size_folder = "Small_Files"
+        elif size < 100 :
+            size_folder = "Medium_Files"
+        else:
+            size_folder = "Large_Files"
             
-            dest_folder = os.path.join(folder_path, size_folder)
-            os.makedirs(dest_folder, exist_ok=True)
-            shutil.move(file_path, os.path.join(dest_folder, filename))
+        dest_folder = os.path.join(folder_path, size_folder)
+        os.makedirs(dest_folder, exist_ok=True)
+        dest_path = os.path.join(dest_folder, filename)
+        shutil.move(file_path, dest_path)
+        history.append(("moved", dest_path, file_path))
+        total_size += os.path.getsize(dest_path)
+        count += 1
+
     print(messages[lang]["done"])
+    report(lang, count, total_size,start_time)
+
+def undo_last_action(lang):
+    if not history : 
+        print(messages[lang]["no_undo"])
+        return
+    
+    action, dest, src = history.pop()
+    if action == "moved" and os.path.exists(dest):
+        shutil.move(dest, src)
+        print(messages[lang]["undo_done"])
+
+
+def report(lang, count, total_size, start_time)
+    end_time = datetime.now()
+    elapsed = (end_time - start_time).total_seconds()
+    print(messages[lang]["report"].format(files=count, size=total_size / (1024 * 1024), time=elapsed))
 
 def main():
     #choose language
@@ -156,6 +209,10 @@ def main():
     
     else:
         print("❌ invalid choice!")
+    
+    undo_choice = input(messages[lang]["undo_prompt"]).strip().lower()
+    if undo_choice == "y":
+        undo_last_action(lang)
 
 if __name__ == "__main__":
     main()
