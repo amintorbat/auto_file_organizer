@@ -85,8 +85,9 @@ def organize_by_type(folder_path, categories, lang):
                 os.makedirs(dest_folder, exist_ok=True)
                 dest_path = os.path.join(dest_folder,filename)
                 shutil.move(file_path, dest_path)
-                history.append("moved", dest_path, file_path)
+                history.append(("moved", dest_path, file_path))
                 total_size += os.path.getsize(dest_path)
+                count += 1
                 break
 
     print(messages[lang]["done"])
