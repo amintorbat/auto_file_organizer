@@ -159,7 +159,7 @@ def undo_last_action(lang):
         print(messages[lang]["undo_done"])
 
 
-def report(lang, count, total_size, start_time)
+def report(lang, count, total_size, start_time):
     end_time = datetime.now()
     elapsed = (end_time - start_time).total_seconds()
     print(messages[lang]["report"].format(files=count, size=total_size / (1024 * 1024), time=elapsed))
