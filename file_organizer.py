@@ -45,7 +45,7 @@ messages = {
         "done": "File organized successfully ✅",
         "invalid_path" : "Invalid folder path ❌",
         "organizing": "Organizing files...",
-         "undo_prompt": "Do you want to undo the last action? (y/n): ",
+        "undo_prompt": "Do you want to undo the last action? (y/n): ",
         "undo_done": "Last action undone successfully 🔄",
         "no_undo": "No actions to undo ⚠️",
         "report": "\n📊 Report:\n- Files: {files}\n- Total moved: {size:.2f} MB\n- Time taken: {time:.2f} sec\n"
