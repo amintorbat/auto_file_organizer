@@ -1,0 +1,3 @@
+([('AutoFileOrganizer',
+   '/Users/amintorbat/auto_file_organizer/dist/AutoFileOrganizer',
+   'EXECUTABLE')],)
