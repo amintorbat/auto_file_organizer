@@ -32,6 +32,7 @@ jobs:
         with:
           name: windows-build
           path: dist/AutoFileOrganizer.exe
+          if-no-files-found: error
           retention-days: 7
 
   build-macos:
@@ -58,7 +59,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: macos-build
-          path: dist/AutoFileOrganizer
+          path: dist/AutoFileOrganizer*
+          if-no-files-found: error
           retention-days: 7
 
   build-linux:
@@ -91,6 +93,7 @@ jobs:
         with:
           name: linux-build
           path: dist/AutoFileOrganizer
+          if-no-files-found: error
           retention-days: 7
 
   create-release:
@@ -105,15 +108,47 @@ jobs:
         with:
           path: artifacts
 
+      - name: Prepare release files
+        run: |
+          echo "Artifact structure:"
+          find artifacts -type f || true
+          ls -R artifacts/ || true
+          
+          # Find and prepare files with proper names
+          mkdir -p release-files
+          
+          # Windows
+          if [ -f "artifacts/windows-build/AutoFileOrganizer.exe" ]; then
+            cp artifacts/windows-build/AutoFileOrganizer.exe release-files/AutoFileOrganizer-Windows.exe
+          else
+            find artifacts/windows-build -type f -name "*.exe" -exec cp {} release-files/AutoFileOrganizer-Windows.exe \;
+          fi
+          
+          # macOS
+          if [ -f "artifacts/macos-build/AutoFileOrganizer" ]; then
+            cp artifacts/macos-build/AutoFileOrganizer release-files/AutoFileOrganizer-macOS
+          elif [ -d "artifacts/macos-build/AutoFileOrganizer.app" ]; then
+            cp -r artifacts/macos-build/AutoFileOrganizer.app release-files/
+          else
+            find artifacts/macos-build -type f -executable -exec cp {} release-files/AutoFileOrganizer-macOS \;
+          fi
+          
+          # Linux
+          if [ -f "artifacts/linux-build/AutoFileOrganizer" ]; then
+            cp artifacts/linux-build/AutoFileOrganizer release-files/AutoFileOrganizer-Linux
+          else
+            find artifacts/linux-build -type f -executable -exec cp {} release-files/AutoFileOrganizer-Linux \;
+          fi
+          
+          echo "Release files prepared:"
+          ls -lh release-files/
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
-          files: |
-            artifacts/windows-build/AutoFileOrganizer.exe
-            artifacts/macos-build/AutoFileOrganizer
-            artifacts/linux-build/AutoFileOrganizer
+          files: release-files/*
           draft: false
           prerelease: false
         env:
