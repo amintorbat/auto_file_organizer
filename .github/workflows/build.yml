@@ -1,4 +1,4 @@
-name: Build & Release Auto File Organizer
+name: Build and Release Auto File Organizer
 
 on:
   push:
@@ -7,115 +7,88 @@ on:
 
 jobs:
   build-windows:
-    name: Build for Windows
     runs-on: windows-latest
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - name: Install Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: |
           pip install -r requirements.txt
           pip install pyinstaller
 
       - name: Build Windows EXE
-        run: pyinstaller --noconsole --onefile --name AutoFileOrganizer-win auto_file_organizer_gui.py
+        run: pyinstaller --noconsole --onefile auto_file_organizer_gui.py
 
-      - name: Upload Windows Artifact
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Windows-Build
-          path: dist/AutoFileOrganizer-win.exe
+          name: AutoFileOrganizer-Windows
+          path: dist/*.exe
 
   build-macos:
-    name: Build for macOS
     runs-on: macos-latest
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - name: Install Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: |
           pip install -r requirements.txt
           pip install pyinstaller
 
       - name: Build macOS APP
-        run: pyinstaller --windowed --onefile --name AutoFileOrganizer-mac auto_file_organizer_gui.py
+        run: pyinstaller --windowed --onefile auto_file_organizer_gui.py
 
-      - name: Upload macOS Artifact
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: macOS-Build
-          path: dist/AutoFileOrganizer-mac
+          name: AutoFileOrganizer-macOS
+          path: dist/*
 
   build-linux:
-    name: Build for Linux
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - name: Install Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: |
           pip install -r requirements.txt
           pip install pyinstaller
 
       - name: Build Linux Binary
-        run: pyinstaller --noconsole --onefile --name AutoFileOrganizer-linux auto_file_organizer_gui.py
+        run: pyinstaller --noconsole --onefile auto_file_organizer_gui.py
 
-      - name: Upload Linux Artifact
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Linux-Build
-          path: dist/AutoFileOrganizer-linux
+          name: AutoFileOrganizer-Linux
+          path: dist/*
 
-  release:
-    name: Create Release & Upload Binaries
-    needs: [build-windows, build-macos, build-linux]
+  create-release:
     runs-on: ubuntu-latest
+    needs: [build-windows, build-macos, build-linux]
 
     steps:
-      - name: Download Windows Artifact
+      - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
-          name: Windows-Build
-          path: release-files/
+          path: release-files
 
-      - name: Download macOS Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: macOS-Build
-          path: release-files/
-
-      - name: Download Linux Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: Linux-Build
-          path: release-files/
-
-      - name: Create GitHub Release
+      - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref_name }}
-          name: "Auto File Organizer ${{ github.ref_name }}"
-          files: release-files/*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          files: release-files/**/*
