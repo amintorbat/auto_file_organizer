@@ -1,7 +1,29 @@
-venv/
+# Byte-compiled / optimized
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
+*.py[cod]
+*$py.class
 
+# Virtual env
+venv/
+env/
+.venv/
+
+# Distribution / build
+build/
+dist/
+*.egg-info/
+*.spec
+
+# PyInstaller
+*.manifest
+*.log
+
+# macOS
+.DS_Store
+
+# IDEs
+.vscode/
+.idea/
+
+# Others
+*.pyc
