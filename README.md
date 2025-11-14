@@ -199,6 +199,51 @@ MyFiles/
 
 ---
 
+## 🚀 Building Releases with GitHub Actions
+
+This project uses GitHub Actions to automatically build executables for Windows, macOS, and Linux when you push a version tag.
+
+### How It Works
+
+1. **Trigger**: The workflow runs automatically when you push a tag starting with `v*` (e.g., `v1.0.0`, `v2.1.3`)
+
+2. **Build Process**: 
+   - Three parallel jobs build the app for each platform:
+     - `build-windows`: Creates `AutoFileOrganizer.exe` on Windows
+     - `build-macos`: Creates `AutoFileOrganizer` binary on macOS
+     - `build-linux`: Creates `AutoFileOrganizer` binary on Linux
+
+3. **Release Creation**: After all builds complete, a GitHub Release is automatically created with all three executables attached.
+
+### How to Create a Release
+
+1. **Create and push a version tag**:
+   ```bash
+   git tag v1.0.0
+   git push origin v1.0.0
+   ```
+
+2. **GitHub Actions will automatically**:
+   - Build executables for all three platforms
+   - Create a GitHub Release
+   - Attach all executables to the release
+
+3. **Download the release** from the GitHub Releases page.
+
+### Workflow File Location
+
+The workflow file is located at: `.github/workflows/build.yml`
+
+### What Gets Built
+
+- **Windows**: `AutoFileOrganizer.exe` (single executable file)
+- **macOS**: `AutoFileOrganizer` (single executable file)
+- **Linux**: `AutoFileOrganizer` (single executable file)
+
+All executables are built using PyInstaller with the `--windowed` flag (no console window) and `--onefile` (single file output).
+
+---
+
 ## 🧾 نسخه فعلی
 
 **نسخه 2.0.0**
