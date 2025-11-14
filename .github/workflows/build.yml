@@ -80,7 +80,6 @@ jobs:
   create-release:
     runs-on: ubuntu-latest
     needs: [build-windows, build-macos, build-linux]
-    runs-on: ubuntu-latest
     steps:
 
       - name: Download All Artifacts
