@@ -30,18 +30,6 @@ Download the latest version from the Releases page:
 
 
 
-📂 Folder Structure After Organizing
-
-Example output:
-
-Downloads/
- ├── Images/
- ├── Videos/
- ├── Documents/
- ├── Music/
- ├── Archives/
- ├── Code/
- └── Others/
 
 
 🛠️ Build From Source
@@ -84,17 +72,6 @@ Feel free to open issues or new ideas.
 
 ---
 
-
-📂 خروجی پس از مرتب‌سازی
-
-Downloads/
- ├── Images/
- ├── Videos/
- ├── Documents/
- ├── Music/
- ├── Archives/
- ├── Code/
- └── Others/
 
 
 
