@@ -1,79 +1,55 @@
 # Auto File Organizer
 
-A simple, fast, and cross-platform tool that automatically organizes files in any folder based on file type.  
-Just select a folder → Auto File Organizer will sort all files into categorized subfolders.
+A small cross-platform desktop utility for sorting files into type-based folders.
 
----
+Auto File Organizer is intended for everyday folders that accumulate mixed files. The user selects a directory and the application groups supported files into categories such as images, video, documents, music, archives, and code.
 
-## 🚀 Features
-- Organizes files by type (Images, Videos, Documents, Music, Archives, Code, etc.)
-- Cross-platform (Windows, macOS, Linux)
-- No installation needed (portable)
-- Very fast and lightweight
-- Safe: never deletes files — only organizes
-- Open-source and free
+## Highlights
 
----
+- Desktop utility with a simple folder-selection workflow.
+- Organizes files by type without deleting them.
+- Release builds for Windows, macOS, and Linux.
+- Automated cross-platform build and release workflow with GitHub Actions.
+- Portable releases available from GitHub Releases.
 
-## 📥 Download
+## Releases
 
-Download the latest version from the Releases page:
+The current published release is **v3.0.1**.
 
-### **➡️ Latest Release: v3.0.1**
-| Platform | File |
-|---------|------|
-| **Windows (.exe)** | [AutoFileOrganizer-Windows.exe](https://github.com/amintorbat/auto_file_organizer/releases/latest/download/AutoFileOrganizer-Windows.exe) |
-| **macOS** | [AutoFileOrganizer-macOS](https://github.com/amintorbat/auto_file_organizer/releases/latest/download/AutoFileOrganizer-macOS) |
-| **Linux** | [AutoFileOrganizer-Linux](https://github.com/amintorbat/auto_file_organizer/releases/latest/download/AutoFileOrganizer-Linux) |
+| Platform | Download |
+| --- | --- |
+| Windows | [AutoFileOrganizer-Windows.exe](https://github.com/amintorbat/auto_file_organizer/releases/latest/download/AutoFileOrganizer-Windows.exe) |
+| macOS | [AutoFileOrganizer-macOS](https://github.com/amintorbat/auto_file_organizer/releases/latest/download/AutoFileOrganizer-macOS) |
+| Linux | [AutoFileOrganizer-Linux](https://github.com/amintorbat/auto_file_organizer/releases/latest/download/AutoFileOrganizer-Linux) |
 
----
+## Build from source
 
+The project uses Go. With a compatible Go toolchain installed:
 
-
-
-
-🛠️ Build From Source
-Requires Go 1.21+
-
-git clone https://github.com/amintorbat/auto_file_organizer
+```bash
+git clone https://github.com/amintorbat/auto_file_organizer.git
 cd auto_file_organizer
 go build
+```
 
-🤝 Contributing
-PRs and suggestions are welcome!
-Feel free to open issues or new ideas.
+## Release workflow
 
+The repository includes a GitHub Actions workflow that builds platform artifacts and prepares them for GitHub Releases. This keeps the release process reproducible across Windows, macOS, and Linux rather than relying on a single development machine.
 
+## Project scope
 
-یک ابزار بسیار ساده، سریع و چندسکویی برای **مرتب‌سازی خودکار فایل‌ها** در هر پوشه.  
-کافیه پوشه رو انتخاب کنید — برنامه ، تمام فایل‌ها رو بر اساس نوعشون دسته‌بندی میکنه .
+This is a focused utility rather than a general-purpose file-management system. Its job is deliberately narrow: take a selected folder and make mixed files easier to navigate by grouping recognized file types.
 
----
+It does not claim to replace a file manager, provide cloud synchronization, or make decisions about file contents.
 
-## 🚀 قابلیت‌ها
-- دسته‌بندی خودکار بر اساس نوع فایل  
-  (تصاویر، ویدیوها، اسناد، موسیقی، آرشیو، کد و…)
-- قابل اجرا در **ویندوز، مک و لینوکس**
-- بسیار سریع و کم‌حجم
-- ایمن — هیچ فایلی رو حذف نمی‌کنه
-- کاملاً متن‌باز و رایگان
+## فارسی
 
----
+**Auto File Organizer** یک ابزار دسکتاپ ساده برای مرتب‌سازی فایل‌های یک پوشه بر اساس نوع آن‌هاست.
 
-## 📥 دانلود آخرین نسخه
+کاربر یک پوشه را انتخاب می‌کند و برنامه فایل‌های پشتیبانی‌شده را در دسته‌هایی مثل تصویر، ویدیو، اسناد، موسیقی، آرشیو و کد مرتب می‌کند. برنامه برای ویندوز، macOS و لینوکس خروجی دارد و فایل‌ها را حذف نمی‌کند.
 
-### **نسخه v3.0.1**
+نسخه‌های آماده از بخش Releases همین مخزن قابل دریافت هستند.
 
-| سیستم‌عامل | لینک دانلود |
-|-----------|--------------|
-| **ویندوز (.exe)** | [AutoFileOrganizer-Windows.exe](https://github.com/amintorbat/auto_file_organizer/releases/latest/download/AutoFileOrganizer-Windows.exe) |
-| **مک‌او‌اس** | [AutoFileOrganizer-macOS](https://github.com/amintorbat/auto_file_organizer/releases/latest/download/AutoFileOrganizer-macOS) |
-| **لینوکس** | [AutoFileOrganizer-Linux](https://github.com/amintorbat/auto_file_organizer/releases/latest/download/AutoFileOrganizer-Linux) |
+## Contributing
 
----
-
-
-
-
-🤝 مشارکت
-خوشحال میشم اگه نظراتتون رو با من مطرح کنید
+Bug reports and focused improvement suggestions are welcome through GitHub Issues and pull requests.
