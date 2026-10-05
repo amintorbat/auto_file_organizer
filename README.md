@@ -24,13 +24,18 @@ The current published release is **v3.0.1**.
 
 ## Build from source
 
-The project uses Go. With a compatible Go toolchain installed:
+The project is implemented in Python. Install the dependencies, then run the application locally:
 
 ```bash
 git clone https://github.com/amintorbat/auto_file_organizer.git
 cd auto_file_organizer
-go build
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python auto_file_organizer_gui.py
 ```
+
+On Windows, activate the virtual environment with `.venv\Scripts\activate`.
 
 ## Release workflow
 
